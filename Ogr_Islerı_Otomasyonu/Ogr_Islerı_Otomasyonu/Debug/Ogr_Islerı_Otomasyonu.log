@@ -1,0 +1,5 @@
+﻿  otomasyon.c
+C:\Users\aliem\Desktop\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(16,11): warning C4133: 'function': incompatible types - from 'char [3]' to 'FILE *const '
+C:\Users\aliem\Desktop\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(16,17): warning C4133: 'function': incompatible types - from 'int *' to 'const char *const '
+C:\Users\aliem\Desktop\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(17): warning C4716: 'menu': must return a value
+  Ogr_Islerı_Otomasyonu.vcxproj -> C:\Users\aliem\Desktop\Ogr_Islerı_Otomasyonu\Debug\Ogr_Islerı_Otomasyonu.exe
