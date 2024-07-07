@@ -1,2 +1,3 @@
 ﻿  otomasyon.c
-  Ogr_Islerı_Otomasyonu.vcxproj -> C:\Users\aliem\Desktop\Ogr_Islerı_Otomasyonu\x64\Debug\Ogr_Islerı_Otomasyonu.exe
+C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(115,13): warning C4098: 'BolumIslemleri': 'void' function returning a value
+  Ogr_Islerı_Otomasyonu.vcxproj -> C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\x64\Debug\Ogr_Islerı_Otomasyonu.exe
