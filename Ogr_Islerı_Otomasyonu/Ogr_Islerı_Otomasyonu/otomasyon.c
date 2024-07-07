@@ -116,6 +116,7 @@ void BolumIslemleri()
 }
 void NotIslemleri()
 {
+    printf("Hello world");
     // Not işlemleri burada olacak
 }
 int menu()
