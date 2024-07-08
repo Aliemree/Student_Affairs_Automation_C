@@ -8,9 +8,169 @@ typedef struct bolum
     char bolumAd[30];
 } bolum;
 
+typedef struct kisi
+{
+    int numara;
+    char tc[12], adsoyad[30], dTarih[30], dYeri[30];
+    char cinsiyet;
+    char adres[30], tel[30], ePosta[30];
+    int askerlikDurumu, bolumID, durum; //durum=1 ise aktif ogrenci, silinmiş=0,mezun=2
+} ogr;
+
+void BolumListele();
+void Transkript();
+void ogrencimezuniyeti();
+void ogrenciekle();
+
+void ogrenciekle()
+{
+    system("cls");
+    printf("Ogrenci Ekleme Islemi..\n");
+    ogr o1;
+
+    FILE* numptr;
+    if (fopen_s(&numptr, "ogrenciNumaralari.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    int numara = 0;
+    while (fread(&numara, sizeof(int), 1, numptr)) {
+        // Dosyadan son numarayı okuyun
+    }
+    numara += 1;
+    o1.numara = numara;
+    fwrite(&numara, sizeof(int), 1, numptr);
+    fclose(numptr);
+
+    printf("TC: ");
+    getchar(); // Önceki girişten kalan newline karakterini tüketir
+    fgets(o1.tc, sizeof(o1.tc), stdin);
+    o1.tc[strcspn(o1.tc, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("AD SOYAD: ");
+    fgets(o1.adsoyad, sizeof(o1.adsoyad), stdin);
+    o1.adsoyad[strcspn(o1.adsoyad, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("DOGUM TARIHI: ");
+    fgets(o1.dTarih, sizeof(o1.dTarih), stdin);
+    o1.dTarih[strcspn(o1.dTarih, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("DOGUM YERI: ");
+    fgets(o1.dYeri, sizeof(o1.dYeri), stdin);
+    o1.dYeri[strcspn(o1.dYeri, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("CINSIYET (E/K): ");
+    o1.cinsiyet = getchar();
+    getchar(); // Newline karakterini kaldırır
+
+    printf("ADRES: ");
+    fgets(o1.adres, sizeof(o1.adres), stdin);
+    o1.adres[strcspn(o1.adres, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("TELEFON NO: ");
+    fgets(o1.tel, sizeof(o1.tel), stdin);
+    o1.tel[strcspn(o1.tel, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("E-POSTA: ");
+    fgets(o1.ePosta, sizeof(o1.ePosta), stdin);
+    o1.ePosta[strcspn(o1.ePosta, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("ASKERLIK DURUMU (1: Tamam, 0: Tamam Degil): ");
+    scanf_s("%d", &o1.askerlikDurumu);
+
+    BolumListele();
+
+    printf("BOLUM NUMARASI: ");
+    scanf_s("%d", &o1.bolumID);
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogrenciler.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    fwrite(&o1, sizeof(ogr), 1, ptr);
+    fclose(ptr);
+
+    printf("%d Numarali Ogrenci Kaydi Tamam...\n", numara);
+}
+
+void ogrencisil()
+{
+    // Öğrenci silme işlemleri burada olacak
+}
+
+void ogrenciara()
+{
+    // Öğrenci arama işlemleri burada olacak
+}
+
+void ogrencilistele()
+{
+    // Öğrenci listeleme işlemleri burada olacak
+}
+
+void ogrencibelgesi()
+{
+    // Öğrenci belgesi işlemleri burada olacak
+}
+
+void Transkript()
+{
+    // Transkript işlemleri burada olacak
+}
+
+void ogrencimezuniyeti()
+{
+    // Öğrenci mezuniyet işlemleri burada olacak
+}
+
+int Ogrencimenu()
+{
+    int secim;
+    printf("\n\tOGRENCI ISLERI ...\n\n");
+    printf("--------------------------------------------------\n");
+    printf("\n\t1-OGRENCI EKLE\n");
+    printf("\n\t2-OGRENCI SIL\n");
+    printf("\n\t3-OGRENCI ARA\n");
+    printf("\n\t4-OGRENCI LISTELE\n");
+    printf("\n\t5-OGRENCI BELGESI\n");
+    printf("\n\t6-TRANSKRIPT\n");
+    printf("\n\t7-OGRENCI MEZUNIYETI\n");
+    printf("\n\t0-PROGRAMI KAPAT \n");
+    printf("\n\t Seciminiz : ");
+    scanf_s("%d", &secim);
+    system("cls");
+    return secim;
+}
+
 void OgrenciIslemleri()
 {
-    // Öğrenci işlemleri burada olacak
+    int secim = Ogrencimenu();
+    while (secim != 0)
+    {
+        switch (secim)
+        {
+        case 1: ogrenciekle();
+            break;
+        case 2: ogrencisil();
+            break;
+        case 3: ogrenciara();
+            break;
+        case 4: ogrencilistele();
+            break;
+        case 5: ogrencibelgesi();
+            break;
+        case 6: Transkript();
+            break;
+        case 7: ogrencimezuniyeti();
+            break;
+        case 0:
+            break;
+        default: printf("Hatali Seçim Yaptiniz !\n");
+        }
+        secim = Ogrencimenu();
+    }
+    printf("Bolum Islemlerinden Cikis Yapiliyor !!");
 }
 
 void OgretimGorevlisiIslemleri()
@@ -84,12 +244,15 @@ void BolumListele()
 int BolumMenu()
 {
     int secim;
+
     printf("\n\t BOLUM ISLEMLERI...\n\n");
+    printf("--------------------------------------------------\n");
     printf("\n\t1-Bolum Ekle\n");
     printf("\n\t2-Bolum Listele\n");
     printf("\n\t0-PROGRAMI KAPAT \n");
     printf("\n\t Seciminiz : ");
     scanf_s("%d", &secim);
+    system("cls");
     return secim;
 }
 void BolumIslemleri()
@@ -123,6 +286,7 @@ int menu()
 {
     int secim;
     printf("\n\tOGRENCI ISLERI OTOMASYONU\n\n");
+    printf("--------------------------------------------------\n");
     printf("\n\t1-OGRENCI ISLEMLERI\n");
     printf("\n\t2-OGRETIM GOREVLISI ISLEMLERI\n");
     printf("\n\t3-DERS ISLEMLERI\n");
