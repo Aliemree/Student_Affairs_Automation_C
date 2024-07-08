@@ -96,32 +96,239 @@ void ogrenciekle()
 
 void ogrencisil()
 {
-    // Öğrenci silme işlemleri burada olacak
+    system("cls");
+    printf("Ogrenci Silme Islemi..\n");
+    int numara;
+    printf("Silinecek Ogrenci Numarasi: ");
+    scanf_s("%d", &numara);
+
+    FILE* ptr;
+    FILE* temp;
+    if (fopen_s(&ptr, "ogrenciler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    if (fopen_s(&temp, "temp.dat", "wb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogr o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogr), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            o1.durum = 0; // Durumu silinmiş olarak güncelle
+        }
+        fwrite(&o1, sizeof(ogr), 1, temp);
+    }
+
+    fclose(ptr);
+    fclose(temp);
+
+    remove("ogrenciler.dat");
+    rename("temp.dat", "ogrenciler.dat");
+
+    if (found) {
+        printf("%d Numarali Ogrenci Basariyla Silindi.\n", numara);
+    }
+    else {
+        printf("Ogrenci bulunamadi.\n");
+    }
 }
 
 void ogrenciara()
 {
-    // Öğrenci arama işlemleri burada olacak
+    system("cls");
+    printf("Ogrenci Arama Islemi..\n");
+    int numara;
+    printf("Aranacak Ogrenci Numarasi: ");
+    scanf_s("%d", &numara);
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogrenciler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogr o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogr), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            printf("Numara: %d\n", o1.numara);
+            printf("TC: %s\n", o1.tc);
+            printf("Ad Soyad: %s\n", o1.adsoyad);
+            printf("Dogum Tarihi: %s\n", o1.dTarih);
+            printf("Dogum Yeri: %s\n", o1.dYeri);
+            printf("Cinsiyet: %c\n", o1.cinsiyet);
+            printf("Adres: %s\n", o1.adres);
+            printf("Telefon No: %s\n", o1.tel);
+            printf("E-Posta: %s\n", o1.ePosta);
+            printf("Askerlik Durumu: %d\n", o1.askerlikDurumu);
+            printf("Bolum ID: %d\n", o1.bolumID);
+            printf("Durum: %d\n", o1.durum);
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Ogrenci bulunamadi.\n");
+    }
+
+    fclose(ptr);
 }
 
 void ogrencilistele()
 {
-    // Öğrenci listeleme işlemleri burada olacak
+    system("cls");
+    printf("Ogrenci Listeleme Islemi..\n");
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogrenciler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogr o1;
+    printf("Numara         | TC            | Ad Soyad         | Dogum Tarihi | Dogum Yeri | Cinsiyet | Adres    | Telefon No | E-Posta   | Askerlik Durumu | Bolum ID | Durum\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------\n");
+    while (fread(&o1, sizeof(ogr), 1, ptr)) {
+        printf("%6d | %-9s | %-10s | %-12s | %-10s | %-8c | %-13s | %-8s | %-15s | %-10d | %-8d | %-5d\n",
+            o1.numara, o1.tc, o1.adsoyad, o1.dTarih, o1.dYeri, o1.cinsiyet, o1.adres, o1.tel, o1.ePosta, o1.askerlikDurumu, o1.bolumID, o1.durum);
+    }
+
+    fclose(ptr);
 }
 
 void ogrencibelgesi()
 {
-    // Öğrenci belgesi işlemleri burada olacak
-}
+    system("cls");
+    printf("Ogrenci Belgesi Islemi..\n");
+    int numara;
+    printf("Belgesi Alinacak Ogrenci Numarasi: ");
+    scanf_s("%d", &numara);
 
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogrenciler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogr o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogr), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            printf("\nOGRENCI BELGESI\n");
+            printf("Numara: %d\n", o1.numara);
+            printf("TC: %s\n", o1.tc);
+            printf("Ad Soyad: %s\n", o1.adsoyad);
+            printf("Dogum Tarihi: %s\n", o1.dTarih);
+            printf("Dogum Yeri: %s\n", o1.dYeri);
+            printf("Cinsiyet: %c\n", o1.cinsiyet);
+            printf("Adres: %s\n", o1.adres);
+            printf("Telefon No: %s\n", o1.tel);
+            printf("E-Posta: %s\n", o1.ePosta);
+            printf("Askerlik Durumu: %d\n", o1.askerlikDurumu);
+            printf("Bolum ID: %d\n", o1.bolumID);
+            printf("Durum: %d\n", o1.durum);
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Ogrenci bulunamadi.\n");
+    }
+
+    fclose(ptr);
+}
 void Transkript()
 {
-    // Transkript işlemleri burada olacak
-}
+    system("cls");
+    printf("Transkript Islemi..\n");
+    int numara;
+    printf("Transkripti Alinacak Ogrenci Numarasi: ");
+    scanf_s("%d", &numara);
 
+    // Transkript bilgileri burada olacak
+    // Örnek olarak, sadece temel bilgileri gösteriyoruz
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogrenciler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogr o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogr), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            printf("\nTRANSKRIPT\n");
+            printf("Numara: %d\n", o1.numara);
+            printf("TC: %s\n", o1.tc);
+            printf("Ad Soyad: %s\n", o1.adsoyad);
+            printf("Dogum Tarihi: %s\n", o1.dTarih);
+            printf("Dogum Yeri: %s\n", o1.dYeri);
+            printf("Cinsiyet: %c\n", o1.cinsiyet);
+            printf("Adres: %s\n", o1.adres);
+            printf("Telefon No: %s\n", o1.tel);
+            printf("E-Posta: %s\n", o1.ePosta);
+            printf("Askerlik Durumu: %d\n", o1.askerlikDurumu);
+            printf("Bolum ID: %d\n", o1.bolumID);
+            printf("Durum: %d\n", o1.durum);
+            // Daha fazla bilgi ekleyebilirsiniz
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Ogrenci bulunamadi.\n");
+    }
+
+    fclose(ptr);
+}
 void ogrencimezuniyeti()
 {
-    // Öğrenci mezuniyet işlemleri burada olacak
+    system("cls");
+    printf("Ogrenci Mezuniyet Islemi..\n");
+    int numara;
+    printf("Mezuniyet Islemi Yapilacak Ogrenci Numarasi: ");
+    scanf_s("%d", &numara);
+
+    FILE* ptr;
+    FILE* temp;
+    if (fopen_s(&ptr, "ogrenciler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    if (fopen_s(&temp, "temp.dat", "wb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogr o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogr), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            o1.durum = 2; // Durumu mezun olarak güncelle
+        }
+        fwrite(&o1, sizeof(ogr), 1, temp);
+    }
+
+    fclose(ptr);
+    fclose(temp);
+
+    remove("ogrenciler.dat");
+    rename("temp.dat", "ogrenciler.dat");
+
+    if (found) {
+        printf("%d Numarali Ogrenci Basariyla Mezun Edildi.\n", numara);
+    }
+    else {
+        printf("Ogrenci bulunamadi.\n");
+    }
 }
 
 int Ogrencimenu()
