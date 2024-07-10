@@ -29,6 +29,17 @@ typedef struct ders
     char dersAd[30];
     int kredi;
 } ders;
+typedef struct not {
+    int ogrenciID;
+    int dersID;
+    int notDegeri;
+} notKaydi;
+
+void notEkle();
+void notSil();
+void notAra();
+void notListele();
+
 void BolumListele();
 void Transkript();
 void ogrencimezuniyeti();
@@ -806,6 +817,171 @@ void dersListele()
 }
 
 
+void NotIslemleri()
+{
+    // Not işlemleri burada olacak
+    int secim;
+
+    do {
+        system("cls");
+        printf("1. Not Ekle\n");
+        printf("2. Not Sil\n");
+        printf("3. Not Ara\n");
+        printf("4. Not Listele\n");
+        printf("0. Cikis\n");
+        printf("Seciminiz: ");
+        scanf_s("%d", &secim);
+
+        switch (secim) {
+        case 1:
+            notEkle();
+            break;
+        case 2:
+            notSil();
+            break;
+        case 3:
+            notAra();
+            break;
+        case 4:
+            notListele();
+            break;
+        }
+    } while (secim != 0);
+}
+
+void notEkle()
+{
+    system("cls");
+    printf("Not Ekleme Islemi..\n");
+
+    notKaydi yeniNot;
+
+    // Öğrenci ID
+    printf("Ogrenci ID: ");
+    scanf_s("%d", &yeniNot.ogrenciID);
+
+    // Ders ID
+    printf("Ders ID: ");
+    scanf_s("%d", &yeniNot.dersID);
+
+    // Not değeri
+    printf("Not Degeri: ");
+    scanf_s("%d", &yeniNot.notDegeri);
+
+    // Yeni notu dosyaya yazın
+    FILE* ptr;
+    if (fopen_s(&ptr, "notlar.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    fwrite(&yeniNot, sizeof(notKaydi), 1, ptr);
+    fclose(ptr);
+
+    printf("Not Kaydi Tamam...\n");
+}
+
+void notSil()
+{
+    system("cls");
+    printf("Not Silme Islemi..\n");
+    int ogrenciID, dersID;
+    printf("Silinecek Notun Ogrenci ID'si: ");
+    scanf_s("%d", &ogrenciID);
+    printf("Silinecek Notun Ders ID'si: ");
+    scanf_s("%d", &dersID);
+
+    FILE* ptr;
+    FILE* temp;
+    if (fopen_s(&ptr, "notlar.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    if (fopen_s(&temp, "temp.dat", "wb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    notKaydi n;
+    int found = 0;
+    while (fread(&n, sizeof(notKaydi), 1, ptr)) {
+        if (n.ogrenciID == ogrenciID && n.dersID == dersID) {
+            found = 1;
+        }
+        else {
+            fwrite(&n, sizeof(notKaydi), 1, temp);
+        }
+    }
+
+    fclose(ptr);
+    fclose(temp);
+
+    remove("notlar.dat");
+    rename("temp.dat", "notlar.dat");
+
+    if (found) {
+        printf("Not Basariyla Silindi.\n");
+    }
+    else {
+        printf("Not bulunamadi.\n");
+    }
+}
+
+void notAra()
+{
+    system("cls");
+    printf("Not Arama Islemi..\n");
+    int ogrenciID, dersID;
+    printf("Aranacak Notun Ogrenci ID'si: ");
+    scanf_s("%d", &ogrenciID);
+    printf("Aranacak Notun Ders ID'si: ");
+    scanf_s("%d", &dersID);
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "notlar.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    notKaydi n;
+    int found = 0;
+    while (fread(&n, sizeof(notKaydi), 1, ptr)) {
+        if (n.ogrenciID == ogrenciID && n.dersID == dersID) {
+            found = 1;
+            printf("Ogrenci ID: %d\n", n.ogrenciID);
+            printf("Ders ID: %d\n", n.dersID);
+            printf("Not Degeri: %d\n", n.notDegeri);
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Not bulunamadi.\n");
+    }
+
+    fclose(ptr);
+}
+
+void notListele()
+{
+    system("cls");
+    printf("Not Listeleme Islemi..\n");
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "notlar.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    notKaydi n;
+    printf("Ogrenci ID | Ders ID   | Not Degeri\n");
+    printf("----------------------------------\n");
+    while (fread(&n, sizeof(notKaydi), 1, ptr)) {
+        printf("%-10d | %-8d | %d\n", n.ogrenciID, n.dersID, n.notDegeri);
+    }
+
+    fclose(ptr);
+}
+
 void BolumEkle()
 {
     system("cls");
@@ -900,11 +1076,7 @@ void BolumIslemleri()
     printf("Bolum Islemlerinden Cikis Yapiliyor !!");
     return 0;
 }
-void NotIslemleri()
-{
-    printf("Hello world");
-    // Not işlemleri burada olacak
-}
+
 int menu()
 {
     int secim;

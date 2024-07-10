@@ -1,5 +1,4 @@
 ﻿  otomasyon.c
-C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(569,21): warning C4013: 'OgretimGorevlisiMenu' undefined; assuming extern returning int
-C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(615,16): warning C4566: character represented by universal-character-name '\u0130' cannot be represented in the current code page (1252)
-C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(901,13): warning C4098: 'BolumIslemleri': 'void' function returning a value
+C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(580,21): warning C4013: 'OgretimGorevlisiMenu' undefined; assuming extern returning int
+C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(1077,13): warning C4098: 'BolumIslemleri': 'void' function returning a value
   Ogr_Islerı_Otomasyonu.vcxproj -> C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\x64\Debug\Ogr_Islerı_Otomasyonu.exe
