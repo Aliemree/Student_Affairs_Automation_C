@@ -2,6 +2,7 @@ C dilinde console de çalışan basit fonksiyonları olan genel tanımlar kullan
 
 Burda İlk olarak Bölüm işlemleri ekranını yaptım. Orda kullandıgım pointerlar if while switc case vs. ne için kullanıldıklarını mantıklarını oturttum.
 Pointerları veri eklediğim için  dosya okuma,açma,kapama ve yazma işlemleri için kullandım.
+Daha sonrasında Ögrenci İşlemleri Ekranının eklemelerini yaptım,içerik olarak kullandığım kodlar pointerlar, basit dilde yazılmış döngüler bulunmaktadır.
 
 
 
