@@ -1,3 +1,4 @@
 ﻿  otomasyon.c
-C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(485,13): warning C4098: 'BolumIslemleri': 'void' function returning a value
+C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(571,21): warning C4013: 'OgretimGorevlisiMenu' undefined; assuming extern returning int
+C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\Ogr_Islerı_Otomasyonu\otomasyon.c(707,13): warning C4098: 'BolumIslemleri': 'void' function returning a value
   Ogr_Islerı_Otomasyonu.vcxproj -> C:\Users\aliem\Desktop\New folder\Ogr_Islerı_Otomasyonu\x64\Debug\Ogr_Islerı_Otomasyonu.exe

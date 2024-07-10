@@ -7,7 +7,6 @@ typedef struct bolum
     int BolumID;
     char bolumAd[30];
 } bolum;
-
 typedef struct kisi
 {
     int numara;
@@ -16,12 +15,19 @@ typedef struct kisi
     char adres[30], tel[30], ePosta[30];
     int askerlikDurumu, bolumID, durum; //durum=1 ise aktif ogrenci, silinmiş=0,mezun=2
 } ogr;
+typedef struct ogretimGorevlisi
+{
+    int numara;
+    char tc[12], adsoyad[30], dTarih[30], dYeri[30];
+    char cinsiyet;
+    char adres[30], tel[30], ePosta[30];
+    int bolumID, durum; //durum=1 ise aktif, silinmiş=0
+} ogretimGorevlisi;
 
 void BolumListele();
 void Transkript();
 void ogrencimezuniyeti();
 void ogrenciekle();
-
 void ogrenciekle()
 {
     system("cls");
@@ -93,7 +99,6 @@ void ogrenciekle()
 
     printf("%d Numarali Ogrenci Kaydi Tamam...\n", numara);
 }
-
 void ogrencisil()
 {
     system("cls");
@@ -136,7 +141,6 @@ void ogrencisil()
         printf("Ogrenci bulunamadi.\n");
     }
 }
-
 void ogrenciara()
 {
     system("cls");
@@ -178,7 +182,6 @@ void ogrenciara()
 
     fclose(ptr);
 }
-
 void ogrencilistele()
 {
     system("cls");
@@ -200,7 +203,6 @@ void ogrencilistele()
 
     fclose(ptr);
 }
-
 void ogrencibelgesi()
 {
     system("cls");
@@ -330,7 +332,6 @@ void ogrencimezuniyeti()
         printf("Ogrenci bulunamadi.\n");
     }
 }
-
 int Ogrencimenu()
 {
     int secim;
@@ -349,7 +350,6 @@ int Ogrencimenu()
     system("cls");
     return secim;
 }
-
 void OgrenciIslemleri()
 {
     int secim = Ogrencimenu();
@@ -379,10 +379,223 @@ void OgrenciIslemleri()
     }
     printf("Bolum Islemlerinden Cikis Yapiliyor !!");
 }
+void ogretimGorevlisiEkle()
+{
+    system("cls");
+    printf("Ogretim Gorevlisi Ekleme Islemi..\n");
+    ogretimGorevlisi o1;
 
+    FILE* numptr;
+    if (fopen_s(&numptr, "ogretimGorevlisiNumaralari.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    int numara = 0;
+    while (fread(&numara, sizeof(int), 1, numptr)) {
+        // Dosyadan son numarayı okuyun
+    }
+    numara += 1;
+    o1.numara = numara;
+    fwrite(&numara, sizeof(int), 1, numptr);
+    fclose(numptr);
+
+    printf("TC: ");
+    getchar(); // Önceki girişten kalan newline karakterini tüketir
+    fgets(o1.tc, sizeof(o1.tc), stdin);
+    o1.tc[strcspn(o1.tc, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("AD SOYAD: ");
+    fgets(o1.adsoyad, sizeof(o1.adsoyad), stdin);
+    o1.adsoyad[strcspn(o1.adsoyad, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("DOGUM TARIHI: ");
+    fgets(o1.dTarih, sizeof(o1.dTarih), stdin);
+    o1.dTarih[strcspn(o1.dTarih, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("DOGUM YERI: ");
+    fgets(o1.dYeri, sizeof(o1.dYeri), stdin);
+    o1.dYeri[strcspn(o1.dYeri, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("CINSIYET (E/K): ");
+    o1.cinsiyet = getchar();
+    getchar(); // Newline karakterini kaldırır
+
+    printf("ADRES: ");
+    fgets(o1.adres, sizeof(o1.adres), stdin);
+    o1.adres[strcspn(o1.adres, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("TELEFON NO: ");
+    fgets(o1.tel, sizeof(o1.tel), stdin);
+    o1.tel[strcspn(o1.tel, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    printf("E-POSTA: ");
+    fgets(o1.ePosta, sizeof(o1.ePosta), stdin);
+    o1.ePosta[strcspn(o1.ePosta, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    BolumListele();
+
+    printf("BOLUM NUMARASI: ");
+    scanf_s("%d", &o1.bolumID);
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogretimGorevlileri.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    fwrite(&o1, sizeof(ogretimGorevlisi), 1, ptr);
+    fclose(ptr);
+
+    printf("%d Numarali Ogretim Gorevlisi Kaydi Tamam...\n", numara);
+}
+void ogretimGorevlisiSil()
+{
+    system("cls");
+    printf("Ogretim Gorevlisi Silme Islemi..\n");
+    int numara;
+    printf("Silinecek Ogretim Gorevlisi Numarasi: ");
+    scanf_s("%d", &numara);
+
+    FILE* ptr;
+    FILE* temp;
+    if (fopen_s(&ptr, "ogretimGorevlileri.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    if (fopen_s(&temp, "temp.dat", "wb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogretimGorevlisi o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogretimGorevlisi), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            o1.durum = 0; // Durumu silinmiş olarak güncelle
+        }
+        fwrite(&o1, sizeof(ogretimGorevlisi), 1, temp);
+    }
+
+    fclose(ptr);
+    fclose(temp);
+
+    remove("ogretimGorevlileri.dat");
+    rename("temp.dat", "ogretimGorevlileri.dat");
+
+    if (found) {
+        printf("%d Numarali Ogretim Gorevlisi Basariyla Silindi.\n", numara);
+    }
+    else {
+        printf("Ogretim Gorevlisi bulunamadi.\n");
+    }
+}
+void ogretimGorevlisiAra()
+{
+    system("cls");
+    printf("Ogretim Gorevlisi Arama Islemi..\n");
+    int numara;
+    printf("Aranacak Ogretim Gorevlisi Numarasi: ");
+    scanf_s("%d", &numara);
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogretimGorevlileri.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogretimGorevlisi o1;
+    int found = 0;
+    while (fread(&o1, sizeof(ogretimGorevlisi), 1, ptr)) {
+        if (o1.numara == numara) {
+            found = 1;
+            printf("Numara: %d\n", o1.numara);
+            printf("TC: %s\n", o1.tc);
+            printf("Ad Soyad: %s\n", o1.adsoyad);
+            printf("Dogum Tarihi: %s\n", o1.dTarih);
+            printf("Dogum Yeri: %s\n", o1.dYeri);
+            printf("Cinsiyet: %c\n", o1.cinsiyet);
+            printf("Adres: %s\n", o1.adres);
+            printf("Telefon No: %s\n", o1.tel);
+            printf("E-Posta: %s\n", o1.ePosta);
+            printf("Bolum ID: %d\n", o1.bolumID);
+            printf("Durum: %d\n", o1.durum);
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Ogretim Gorevlisi bulunamadi.\n");
+    }
+
+    fclose(ptr);
+}
+void ogretimGorevlisiListele()
+{
+    system("cls");
+    printf("Ogretim Gorevlisi Listeleme Islemi..\n");
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "ogretimGorevlileri.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ogretimGorevlisi o1;
+    while (fread(&o1, sizeof(ogretimGorevlisi), 1, ptr)) {
+        printf("Numara: %d\n", o1.numara);
+        printf("TC: %s\n", o1.tc);
+        printf("Ad Soyad: %s\n", o1.adsoyad);
+        printf("Dogum Tarihi: %s\n", o1.dTarih);
+        printf("Dogum Yeri: %s\n", o1.dYeri);
+        printf("Cinsiyet: %c\n", o1.cinsiyet);
+        printf("Adres: %s\n", o1.adres);
+        printf("Telefon No: %s\n", o1.tel);
+        printf("E-Posta: %s\n", o1.ePosta);
+        printf("Bolum ID: %d\n", o1.bolumID);
+        printf("Durum: %d\n\n", o1.durum);
+    }
+
+    fclose(ptr);
+}
 void OgretimGorevlisiIslemleri()
 {
-    // Öğretim görevlisi işlemleri burada olacak
+    while (1)
+    {
+        int secim = OgretimGorevlisiMenu();
+        switch (secim)
+        {
+        case 1:
+            ogretimGorevlisiEkle();
+            break;
+        case 2:
+            ogretimGorevlisiSil();
+            break;
+        case 3:
+            ogretimGorevlisiAra();
+            break;
+        case 4:
+            ogretimGorevlisiListele();
+            break;
+        case 5:
+            return;
+        default:
+            printf("Hatali Secim. Tekrar deneyin.\n");
+            break;
+        }
+    }
+}
+int OgretimGorevlisiMenu()
+{
+    printf("OGRETIM GOREVLISI ISLEMLERI\n");
+    printf("1. Ogretim Gorevlisi Ekle\n");
+    printf("2. Ogretim Gorevlisi Sil\n");
+    printf("3. Ogretim Gorevlisi Ara\n");
+    printf("4. Ogretim Gorevlisi Listele\n");
+    printf("5. Ana Menuye Don\n");
+    printf("Seciminiz: ");
+    int secim;
+    scanf_s("%d", &secim);
+    return secim;
 }
 
 void DersIslemleri()
