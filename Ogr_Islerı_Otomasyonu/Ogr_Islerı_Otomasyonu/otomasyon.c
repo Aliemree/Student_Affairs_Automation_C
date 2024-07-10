@@ -23,7 +23,12 @@ typedef struct ogretimGorevlisi
     char adres[30], tel[30], ePosta[30];
     int bolumID, durum; //durum=1 ise aktif, silinmiş=0
 } ogretimGorevlisi;
-
+typedef struct ders
+{
+    int dersID;
+    char dersAd[30];
+    int kredi;
+} ders;
 void BolumListele();
 void Transkript();
 void ogrencimezuniyeti();
@@ -597,11 +602,209 @@ int OgretimGorevlisiMenu()
     scanf_s("%d", &secim);
     return secim;
 }
-
+void dersEkle();
+void dersSil();
+void dersAra();
+void dersListele();
 void DersIslemleri()
 {
-    // Ders işlemleri burada olacak
+    int secim;
+
+    do
+    {
+        printf("\n Ders Islemleri\n");
+        printf("1. Ders Ekle\n");
+        printf("2. Ders Sil\n");
+        printf("3. Ders Ara\n");
+        printf("4. Ders Listele\n");
+        printf("0. Ana Menuye Don\n");
+        printf("Seçiminiz: ");
+        scanf_s("%d", &secim);
+
+        switch (secim)
+        {
+        case 1:
+            dersEkle();
+            break;
+        case 2:
+            dersSil();
+            break;
+        case 3:
+            dersAra();
+            break;
+        case 4:
+            dersListele();
+            break;
+        case 0:
+            printf("Ana menüye dönülüyor...\n");
+            break;
+        default:
+            printf("Gecersiz secim! Tekrar deneyin.\n");
+            break;
+        }
+    } while (secim != 0);
 }
+void dersEkle()
+{
+    system("cls");
+    printf("Ders Ekleme Islemi..\n");
+
+    // Ders yapısını tanımlayın
+    typedef struct ders
+    {
+        int dersID;
+        char dersAd[30];
+        int kredi;
+    } ders;
+
+    ders d1;
+
+    // Ders adı
+    printf("Ders Adi: ");
+    getchar(); // Önceki girişten kalan newline karakterini tüketir
+    fgets(d1.dersAd, sizeof(d1.dersAd), stdin);
+    d1.dersAd[strcspn(d1.dersAd, "\n")] = '\0'; // Newline karakterini kaldırır
+
+    // Ders kredisi
+    printf("Kredi: ");
+    scanf_s("%d", &d1.kredi);
+
+    // Dosyadan son ders numarasını okuyun ve yeni ders numarasını ayarlayın
+    FILE* numptr;
+    if (fopen_s(&numptr, "dersNumaralari.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    int numara = 0;
+    while (fread(&numara, sizeof(int), 1, numptr)) {
+        // Dosyadan son numarayı okuyun
+    }
+    numara += 1;
+    fwrite(&numara, sizeof(int), 1, numptr);
+    fclose(numptr);
+    d1.dersID = numara;
+
+    // Yeni dersi dosyaya yazın
+    FILE* ptr;
+    if (fopen_s(&ptr, "dersler.dat", "a+b") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    fwrite(&d1, sizeof(ders), 1, ptr);
+    fclose(ptr);
+
+    printf("%d Numarali Ders Kaydi Tamam...\n", numara);
+}
+void dersSil()
+{
+    system("cls");
+    printf("Ders Silme Islemi..\n");
+    int dersID;
+    printf("Silinecek Ders Numarasi: ");
+    scanf_s("%d", &dersID);
+
+    FILE* ptr;
+    FILE* temp;
+    if (fopen_s(&ptr, "dersler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+    if (fopen_s(&temp, "temp.dat", "wb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    typedef struct ders
+    {
+        int dersID;
+        char dersAd[30];
+        int kredi;
+    } ders;
+
+    ders d1;
+    int found = 0;
+    while (fread(&d1, sizeof(ders), 1, ptr)) {
+        if (d1.dersID == dersID) {
+            found = 1;
+        }
+        else {
+            fwrite(&d1, sizeof(ders), 1, temp);
+        }
+    }
+
+    fclose(ptr);
+    fclose(temp);
+
+    remove("dersler.dat");
+    rename("temp.dat", "dersler.dat");
+
+    if (found) {
+        printf("%d Numarali Ders Basariyla Silindi.\n", dersID);
+    }
+    else {
+        printf("Ders bulunamadi.\n");
+    }
+}
+void dersAra()
+{
+    system("cls");
+    printf("Ders Arama Islemi..\n");
+    int dersID;
+    printf("Aranacak Ders Numarasi: ");
+    scanf_s("%d", &dersID);
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "dersler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    typedef struct ders
+    {
+        int dersID;
+        char dersAd[30];
+        int kredi;
+    } ders;
+
+    ders d1;
+    int found = 0;
+    while (fread(&d1, sizeof(ders), 1, ptr)) {
+        if (d1.dersID == dersID) {
+            found = 1;
+            printf("Ders ID: %d\n", d1.dersID);
+            printf("Ders Adi: %s\n", d1.dersAd);
+            printf("Kredi: %d\n", d1.kredi);
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Ders bulunamadi.\n");
+    }
+
+    fclose(ptr);
+}
+void dersListele()
+{
+    system("cls");
+    printf("Ders Listeleme Islemi..\n");
+
+    FILE* ptr;
+    if (fopen_s(&ptr, "dersler.dat", "rb") != 0) {
+        perror("File opening failed");
+        return;
+    }
+
+    ders d1;
+    printf("Ders ID   | Ders Adi                     | Kredi\n");
+    printf("-------------------------------------------------\n");
+    while (fread(&d1, sizeof(ders), 1, ptr)) {
+        printf("%-10d | %-30s | %d\n", d1.dersID, d1.dersAd, d1.kredi);
+    }
+
+    fclose(ptr);
+}
+
 
 void BolumEkle()
 {
